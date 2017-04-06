@@ -13,6 +13,8 @@ class WelcomeController extends Controller
     public function __invoke(Request $request) {
 
           $length = $request->input('length', null);
+          $lengthMin = 7;
+          $lengthMax = 12;
           $includeCapitals = $request->has('includeCapitals', null);
           $includeLowers = $request->has('includeLowers', null);
           $includeNumbers = $request->has('includeNumbers', null);
@@ -28,6 +30,8 @@ class WelcomeController extends Controller
 
         return view('welcome')->with([
             'length' => $length,
+            'lengthMin' => $lengthMin,
+            'lengthMax' => $lengthMax,
             'includeCapitals' => $includeCapitals,
             'includeLowers' => $includeLowers,
             'includeNumbers' => $includeNumbers,

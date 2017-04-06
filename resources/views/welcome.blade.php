@@ -13,7 +13,7 @@
         <br>
 
         <label for='length'><strong>Length 7-12 chars (REQUIRED)</strong></label>
-        <input type='number' name='length' id='length' size='5' min='7' max='12' value='{{ $length or '' }}' >
+        <input type='number' name='length' id='length' size='5' min='{{ $lengthMin or '7' }}' max='{{ $lengthMax or '12' }}' value='{{ $length or '' }}' >
 
         <br>
 
