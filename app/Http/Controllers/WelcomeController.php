@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Rych\Random\Random;
-use Carbon\Carbon;
+
 
 class WelcomeController extends Controller
 {
@@ -23,9 +23,12 @@ class WelcomeController extends Controller
 
           $finalPassword = 'default';
 
-          if (!empty($length)) {
+          if (!empty($length) && $length >=$lengthMin && $length <=$lengthMax) {
             dump($request->all());
             $finalPassword = $this->generatePassword($request);
+          }
+          else {
+              $finalPassword = 'You must enter a valid length';
           }
 
         return view('welcome')->with([
@@ -48,6 +51,7 @@ class WelcomeController extends Controller
         $includeLowers = $request->has('includeLowers', null);
         $includeNumbers = $request->has('includeNumbers', null);
         $includeSymbols = $request->has('includeSymbols', null);
+        $valCheckbox = false;
         $lastChar = $request->input('lastChar', null);
 
         $lettersCapitals = range('A', 'Z');
@@ -63,35 +67,48 @@ class WelcomeController extends Controller
 
         if ($includeCapitals != null) {
             $possibleValues = array_merge($possibleValues, $lettersCapitals);
+            $valCheckbox = true;
         }
 
         if ($includeLowers != null) {
             $possibleValues = array_merge($possibleValues, $lettersLowers);
+            $valCheckbox = true;
         }
 
         if ($includeNumbers != null) {
             $possibleValues = array_merge($possibleValues, $numbers);
+            $valCheckbox = true;
         }
 
         if ($includeSymbols != null) {
             $possibleValues = array_merge($possibleValues, $symbols);
+            $valCheckbox = true;
         }
 
-        dump($possibleValues);
+        if ($valCheckbox == true) {
+            dump($possibleValues);
 
-        for ($i = 0; $i<$length; $i++) {
-            if ($i==$length-1 and $lastChar!=null) {
-                $finalPassword = $finalPassword.$lastChar;
+            for ($i = 0; $i<$length; $i++) {
+                if ($i==$length-1 and $lastChar!=null) {
+                    $finalPassword = $finalPassword.$lastChar;
+                }
+                else {
+                    $key=array_rand($possibleValues, 1);
+                    $finalPassword = $finalPassword.$possibleValues[$key];
+                }
             }
-            else {
-                $key=array_rand($possibleValues, 1);
-                $finalPassword = $finalPassword.$possibleValues[$key];
-            }
+        }
+        else {
+          $finalPassword='You must check one checkbox';
         }
 
         dump($finalPassword);
-        return $finalPassword;
+
+    }
+    else {
+      $finalPassword='You must enter a valid length';
     }
 
+    return $finalPassword;
 }
 }

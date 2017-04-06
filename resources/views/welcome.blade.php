@@ -49,9 +49,8 @@
     </form>
 
 
-    @if($length != null)
+
         <h2 id='result'>  {{ $finalPassword or '' }} </h2>
 
-    @endif
 
 @endsection
