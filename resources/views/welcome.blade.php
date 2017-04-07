@@ -17,7 +17,7 @@
 
         <br>
 
-        <p id=requirement><strong>At least one box is REQUIRED to be checked</strong></p>
+        <p><strong>At least one box is REQUIRED to be checked</strong></p>
 
         <input type='checkbox' name='includeCapitals' id='includeCapitals' {{ $includeCapitals ? 'CHECKED' : '' }} >
         <label for='includeCapitals'>Include Capital Letters</label>
@@ -48,9 +48,14 @@
 
     </form>
 
-
-
+    @if(count($errors) > 0)
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    @else
         <h2 id='result'>  {{ $finalPassword or '' }} </h2>
-
+    @endif
 
 @endsection

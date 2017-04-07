@@ -9,8 +9,6 @@ class WelcomeController extends Controller
 
     public function __invoke(Request $request) {
 
-
-
           # Collect information about what was submitted as well as declare variables
           $length = $request->input('length', null);
           $lengthMin = 7;
@@ -32,19 +30,6 @@ class WelcomeController extends Controller
           else {
               $finalPassword = 'You must enter a valid length';
           }
-
-          $this->validate($request, [
-              'length' => 'required',
-              'length' => 'integer',
-              'length' => 'min:7',
-              'length' => 'max:12',
-              'includeCapitals' => 'required_without_all:includeLowers,includeNumbers,includeSymbols',
-              'includeLowers' => 'required_without_all:includeCapitals,includeNumbers,includeSymbols',
-              'includeNumbers' => 'required_without_all:includeCapitals,includeLowers,includeSymbols',
-              'includeSymbols' => 'required_without_all:includeCapitals,includeLowers,includeNumbers',
-              'lastChar' => 'max:1',
-
-          ]);
 
           # Return values to the welcome HTML layout
         return view('welcome')->with([
