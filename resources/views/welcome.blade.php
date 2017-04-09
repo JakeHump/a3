@@ -5,9 +5,9 @@
 @endsection
 
 @section('content')
-    <h1>Create a strong password</h1>
+     <h1>Create a strong password</h1>
 
-    <form method='GET' action='/'>
+     <form method='GET' action='/'>
 
         <br>
 

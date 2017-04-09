@@ -57,7 +57,7 @@ class WelcomeController extends Controller
             $possibleValues = array_merge($possibleValues, $symbols);
         }
 
-        # Create password
+        # Create password 
         for ($i = 0; $i<$length; $i++) {
             if ($i==$length-1 and $lastChar!=null) {
                 $finalPassword = $finalPassword.$lastChar;
