@@ -18,7 +18,7 @@ class WelcomeController extends Controller
           $includeNumbers = $request->has('includeNumbers', null);
           $includeSymbols = $request->has('includeSymbols', null);
           $lastChar = $request->input('lastChar', null);
-          $finalPassword = '';
+          $finalPassword = ' ';
 
           # If the submit button is selected
           if (isset($_GET['submit'])) {
