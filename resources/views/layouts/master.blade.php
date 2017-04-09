@@ -20,7 +20,7 @@
         <img
         src='https://s3-us-west-1.amazonaws.com/dwa15/password_photo.jpg'
         style='width:300px'
-        alt='Foobooks Logo'>
+        alt='Password Logo'>
     </header>
 
     <section>
