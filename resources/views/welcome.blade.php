@@ -54,7 +54,7 @@
             @endforeach
         </ul>
     @else
-        <h2 id='result'>  {{ $finalPassword or ' ' }} </h2>
+        <h2>  {{ $finalPassword or ' ' }} </h2>
     @endif
 
 @endsection
