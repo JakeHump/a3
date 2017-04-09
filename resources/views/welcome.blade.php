@@ -55,7 +55,8 @@
         </ul>
     @else
         @if (!empty($finalPassword))
-            <h2>  {{ $finalPassword or ' ' }} </h2>            
+            <h2>  {{ $finalPassword or ' ' }} </h2>
+        @endif
     @endif
 
 @endsection
