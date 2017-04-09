@@ -9,7 +9,17 @@ class WelcomeController extends Controller
 
     public function __invoke(Request $request) {
 
-        # Collect information about what was submitted as well as declare variables
+        # Laravel Validation that all input meets requirements
+        $this->validate($request, [
+            'length' => 'required|numeric|min:7|max:12',
+            'includeCapitals' => 'required_without_all:includeLowers,includeNumbers,includeSymbols',
+            'includeLowers' => 'required_without_all:includeCapitals,includeNumbers,includeSymbols',
+            'includeNumbers' => 'required_without_all:includeCapitals,includeLowers,includeSymbols',
+            'includeSymbols' => 'required_without_all:includeCapitals,includeLowers,includeNumbers',
+            'lastChar' => 'max:1',
+        ]);
+
+        # collect data from the form submission
         $length = $request->input('length', null);
         $lengthMin = 7;
         $lengthMax = 12;
@@ -18,20 +28,47 @@ class WelcomeController extends Controller
         $includeNumbers = $request->has('includeNumbers', null);
         $includeSymbols = $request->has('includeSymbols', null);
         $lastChar = $request->input('lastChar', null);
+        $finalPassword = 'default';
 
-        $finalPassword = '';
+        # Set the different options for chars in the array
+        $lettersCapitals = range('A', 'Z');
+        $lettersLowers = range('a', 'z');
+        $numbers = range('0', '9');
+        $symbols = [ ')','!','@','#','$','%','^','&','*','(', ':',';','/','~','.' ];
 
-        # My own validation - see comments in submission
-        # If length is set and between the min and max
-        if (!empty($length) && $length >=$lengthMin && $length <=$lengthMax) {
-            #dump($request->all());
-            $finalPassword = $this->generatePassword($request);
+        # Initialize the array of values
+        $possibleValues=[];
+        $finalPassword='';
+
+        # For each checkbox, include more choices of values
+        if ($includeCapitals != null) {
+            $possibleValues = array_merge($possibleValues, $lettersCapitals);
         }
-        else {
-            $finalPassword = 'You must enter a valid length';
+
+        if ($includeLowers != null) {
+            $possibleValues = array_merge($possibleValues, $lettersLowers);
         }
 
-        # Return values to the welcome HTML layout
+        if ($includeNumbers != null) {
+            $possibleValues = array_merge($possibleValues, $numbers);
+        }
+
+        if ($includeSymbols != null) {
+            $possibleValues = array_merge($possibleValues, $symbols);
+        }
+
+        # Create password
+        for ($i = 0; $i<$length; $i++) {
+            if ($i==$length-1 and $lastChar!=null) {
+                $finalPassword = $finalPassword.$lastChar;
+            }
+            else {
+                $key = array_rand($possibleValues, 1);
+                $finalPassword = $finalPassword.$possibleValues[$key];
+            }
+        }
+
+        # Call the welcome layout with these variables
         return view('welcome')->with([
             'length' => $length,
             'lengthMin' => $lengthMin,
@@ -43,78 +80,5 @@ class WelcomeController extends Controller
             'lastChar' => $lastChar,
             'finalPassword' => $finalPassword
         ]);
-    }
-
-    # Function for creating the password based on the user input
-    public function generatePassword(Request $request) {
-
-        $length = $request->input('length', null);
-        $includeCapitals = $request->has('includeCapitals', null);
-        $includeLowers = $request->has('includeLowers', null);
-        $includeNumbers = $request->has('includeNumbers', null);
-        $includeSymbols = $request->has('includeSymbols', null);
-        $lastChar = $request->input('lastChar', null);
-        $valCheckbox = false;
-
-        # Set all of the potential values
-        $lettersCapitals = range('A', 'Z');
-        $lettersLowers = range('a', 'z');
-        $numbers = range('0', '9');
-        $symbols = [ ')','!','@','#','$','%','^','&','*','(', ':',';','/','~','.' ];
-
-        # Initialize array for possible values and final password
-        $possibleValues=[];
-        $finalPassword='';
-
-        if ($length != null ) {
-
-            # for each checked box build the list
-            if ($includeCapitals != null) {
-                $possibleValues = array_merge($possibleValues, $lettersCapitals);
-                $valCheckbox = true;
-            }
-
-            if ($includeLowers != null) {
-                $possibleValues = array_merge($possibleValues, $lettersLowers);
-                $valCheckbox = true;
-            }
-
-            if ($includeNumbers != null) {
-                $possibleValues = array_merge($possibleValues, $numbers);
-                $valCheckbox = true;
-            }
-
-            if ($includeSymbols != null) {
-                $possibleValues = array_merge($possibleValues, $symbols);
-                $valCheckbox = true;
-            }
-
-            # If at least one of the checkboxes is checked, build the password
-            if ($valCheckbox == true) {
-
-                for ($i = 0; $i<$length; $i++) {
-                    if ($i==$length-1 and $lastChar!=null) {
-                        $finalPassword = $finalPassword.$lastChar;
-                    }
-                    else {
-                        $key=array_rand($possibleValues, 1);
-                        $finalPassword = $finalPassword.$possibleValues[$key];
-                    }
-                }
-            }
-
-            # Let the user know they need to check at least one box
-            else {
-                  $finalPassword='You must check at least one checkbox';
-            }
-
-        }
-
-        # Let the user know the lenght is out of bounds
-        else {
-            $finalPassword='You must enter a valid length';
-        }
-
-        return $finalPassword;
     }
 }

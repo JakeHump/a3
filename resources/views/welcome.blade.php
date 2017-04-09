@@ -8,33 +8,32 @@
     <h1>Create a strong password</h1>
 
     <form method='GET' action='/'>
-        {{ csrf_field() }}
 
         <br>
 
         <label for='length'><strong>Length 7-12 chars (REQUIRED)</strong></label>
-        <input type='number' name='length' id='length' size='5' min='{{ $lengthMin or '7' }}' max='{{ $lengthMax or '12' }}' value='{{ $length or '' }}' >
+        <input type='number' name='length' id='length' size='5' min='7' max='12' value='{{ $length or '' }}' >
 
         <br>
 
         <p><strong>At least one box is REQUIRED to be checked</strong></p>
 
-        <input type='checkbox' name='includeCapitals' id='includeCapitals' {{ $includeCapitals ? 'CHECKED' : '' }} >
+        <input type='checkbox' name='includeCapitals' id='includeCapitals' {{ ($includeCapitals) ? 'CHECKED' : '' }} >
         <label for='includeCapitals'>Include Capital Letters</label>
 
         <br>
 
-        <input type='checkbox' name='includeLowers' id='includeLowers' {{ $includeLowers ? 'CHECKED' : '' }} >
+        <input type='checkbox' name='includeLowers' id='includeLowers' {{ ($includeLowers) ? 'CHECKED' : '' }} >
         <label for='includeLowers'>Include Lowercase Letters</label>
 
         <br>
 
-        <input type='checkbox' name='includeNumbers' id='includeNumbers' {{ $includeNumbers ? 'CHECKED' : '' }} >
+        <input type='checkbox' name='includeNumbers' id='includeNumbers' {{ ($includeNumbers) ? 'CHECKED' : '' }} >
         <label for='includeNumbers'>Include Numbers</label>
 
         <br>
 
-        <input type='checkbox' name='includeSymbols' id='includeSymbols' {{ $includeSymbols ? 'CHECKED' : '' }} >
+        <input type='checkbox' name='includeSymbols' id='includeSymbols' {{ ($includeSymbols) ? 'CHECKED' : '' }} >
         <label for='includeSymbols'>Include Symbols</label>
 
         <br>
